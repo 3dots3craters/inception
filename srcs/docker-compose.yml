@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+    inception_server:
+
+volumes:
+  database:
+    driver_opts:
+      o: bind
+      type: volume
+      device: /home/hayelee/data/database
+
+  wp:
+    driver_opts:
+      o: bind
+      type: volume
+      device: /home/hayelee/data/wordpress
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    networks:
+      - inception_server
+    volumes:
+      - database:/var/www/database
+    env_file:
+      - .env
+    restart: always
