@@ -3,7 +3,6 @@
 all:
 	@sudo mkdir -p /home/hayelee/data/wordpress
 	@sudo mkdir -p /home/hayelee/data/database
-	@sudo echo "127.0.0.1 hayelee.42.fr" >> /etc/hosts
 	@sudo docker-compose -f srcs/docker-compose.yml up --build -d
 	
 up:

@@ -2,6 +2,7 @@ version: '3.8'
 
 networks:
     inception_server:
+      driver : bridge
 
 volumes:
   database:
@@ -17,6 +18,19 @@ volumes:
       device: /home/hayelee/data/wordpress
 
 services:
+  nginx:
+    build: ./requirements/nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    networks:
+      - inception_server
+    volumes:
+      - wp:/var/www/wordpress
+    env_file:
+      - .env
+    restart: always
+
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
@@ -26,6 +40,21 @@ services:
       - inception_server
     volumes:
       - database:/var/www/database
+    env_file:
+      - .env
+    restart: always
+
+  wordpress:
+    depends_on:
+      - mariadb
+    build: ./requirements/wordpress
+    container_name: wordpress
+    ports:
+      - "9000:9000"
+    networks:
+      - inception_server
+    volumes:
+      - wp:/var/www/wordpress
     env_file:
       - .env
     restart: always
